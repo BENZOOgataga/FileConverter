@@ -1,0 +1,4 @@
+Flask
+Pillow
+pydub
+# ffmpeg required for audio/video
