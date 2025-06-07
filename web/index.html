@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File Converter</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 500px; margin: auto; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>File Converter</h1>
+    <form id="convert-form" method="post" enctype="multipart/form-data" action="/convert">
+        <input type="file" id="file" name="file" required />
+        <div id="options" style="display:none;">
+            <label for="target_format">Convert to:</label>
+            <select id="target_format" name="target_format"></select>
+            <button type="submit">Convert</button>
+        </div>
+    </form>
+</div>
+<script>
+const mapping = {
+    image: ['png','jpg','jpeg','gif','bmp','webp','tiff'],
+    audio: ['mp3','wav','ogg','flac','aac'],
+    video: ['mp4','avi','mov','mkv','webm','flv','gif']
+};
+
+document.getElementById('file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    let targets = [];
+    if (mapping.image.includes(ext)) targets = mapping.image.filter(f => f !== ext);
+    else if (mapping.audio.includes(ext)) targets = mapping.audio.filter(f => f !== ext);
+    else if (mapping.video.includes(ext)) targets = mapping.video.filter(f => f !== ext);
+    const select = document.getElementById('target_format');
+    select.innerHTML = '';
+    targets.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        select.appendChild(opt);
+    });
+    document.getElementById('options').style.display = targets.length ? 'block' : 'none';
+});
+</script>
+</body>
+</html>
